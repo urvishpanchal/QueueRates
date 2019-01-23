@@ -3,7 +3,7 @@ Alias to show queue rates per interface on Arista EOS devices
 
 Steps: 
 
-1. The script uses Terminattr to get the counters, so we need to enable TerminAttr first
+1. The script uses Terminattr to get the counters, so we need to enable TerminAttr first.  
 Sample TerminAttr Config:
 ```
 daemon TerminAttr
