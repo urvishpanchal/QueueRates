@@ -10,15 +10,15 @@ from collections import defaultdict
 
 def parse_args():
     parser = argparse.ArgumentParser(epilog="Example: python QueueRates.py -e Ethernet29 -l 30")
-    parser.add_argument("-l", "--loadInterval", type=int, default=10, help="Specify load interval time in seconds")
+    parser.add_argument("-l", "--pollPeriod", type=int, default=10, help="Specify poll period time in seconds")
     parser.add_argument("-e", "--ethernet", nargs='+', default=["Ethernet1/1"], help="Ethernet Interface List")
     args = parser.parse_args()
     return args
 
-def getQueueByteCount(ethernet, loadInterval):
+def getQueueByteCount(ethernet, pollPeriod):
     import requests
     response1 = requests.get('http://localhost:6060/rest/Smash/counters/queue/SandCounters/current/intfQueueCounter')
-    time.sleep(loadInterval)
+    time.sleep(pollPeriod)
     response2 = requests.get('http://localhost:6060/rest/Smash/counters/queue/SandCounters/current/intfQueueCounter')
     for interface,value in json.loads(response1.content).iteritems():
         if ethernet in interface:
@@ -33,23 +33,23 @@ def getQueueByteCount(ethernet, loadInterval):
     return(firstReading, secondReading)
 
 
-def calculateDiff(firstReading, secondReading, loadInterval):
-    diff = defaultdict(dict)
+def calculateAverage(firstReading, secondReading, pollPeriod):
+    avgCount = defaultdict(dict)
     for first,second in zip(firstReading,secondReading):
         if first['queueType'] == "uc":
             for k in first:
                 if isinstance(first[k],(int,long)):
-                    diff[firstReading.index(first)][k] = float(second[k]-first[k])/loadInterval
-    return diff
+                    avgCount[firstReading.index(first)][k] = float(second[k]-first[k])/pollPeriod
+    return avgCount
 
 
-def renderOutput(diff):
+def renderOutput(avgCount):
     counterDisplayFormat = "%-20s %18s %15s %15s %15s"
     print counterDisplayFormat % ( "Queue", "Mbps",
                                               "Pkts/s",
-                                              "BitsDropped/s",
+                                              "MbpsDropped",
                                               "PktsDropped/s")
-    for queue, data in diff.iteritems():
+    for queue, data in avgCount.iteritems():
         print counterDisplayFormat % ( queue, data['bytes']/125000,
                                               data['pkts'],
                                               data['bytesDropped']/125000,
@@ -59,9 +59,9 @@ def main():
     args = parse_args()
     try:
         for eth in args.ethernet:
-            firstReading, secondReading = getQueueByteCount(eth, args.loadInterval)
-            diff = calculateDiff(firstReading, secondReading, args.loadInterval) 
-            renderOutput(diff)
+            firstReading, secondReading = getQueueByteCount(eth, args.pollPeriod)
+            avgCount = calculateAverage(firstReading, secondReading, args.pollPeriod) 
+            renderOutput(avgCount)
     except:
         print("Have you enabled Terminattr?")
 
