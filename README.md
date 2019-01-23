@@ -23,7 +23,7 @@ alias sqr
 
 ```
 switch#sqr Ethernet5/7/1 5
-Queue                              Mbps          Pkts/s   BitsDropped/s   PktsDropped/s
+Queue                              Mbps          Pkts/s     MbpsDropped   PktsDropped/s
 0                                   0.0             0.0             0.0             0.0
 1                         81933.3503152     152860728.2        8.352488         15583.0
 7                             0.0040512             8.2             0.0             0.0
@@ -31,7 +31,7 @@ Queue                              Mbps          Pkts/s   BitsDropped/s   PktsDr
 Another example:
 ```
 switch#sqr Ethernet5/7/1 10
-Queue                              Mbps          Pkts/s   BitsDropped/s   PktsDropped/s
+Queue                              Mbps          Pkts/s     MbpsDropped   PktsDropped/s
 0                            56.3702048          7025.2             0.0             0.0
 1                           2276.717724        283738.5             0.0             0.0
 2                            50.7582192          6325.8             0.0             0.0
