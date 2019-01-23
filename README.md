@@ -14,7 +14,7 @@ daemon TerminAttr
 3. Configure the alias on the CLI:
 ```
 alias sqr
-   !! Syntax : sqr <INTF> <LOAD-INTERVAL>
+   !! Syntax : sqr <INTF> <POLL-PERIOD>
    !! Example : sqr Ethernet5/3/1 30
    10 bash python /mnt/flash/QueueRates.py -e %1 -l %2
 ```
