@@ -7,7 +7,7 @@ Steps:
 Sample TerminAttr Config:
 ```
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -ingestgrpcurl=<ip:port> -taillogs -ingestauth=key,<key> -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -ingestvrf=default
+   exec /usr/bin/TerminAttr -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -ingestvrf=default
    no shutdown
 ```
 2. Copy the script to ```/mnt/flash/``` directory on the switch
